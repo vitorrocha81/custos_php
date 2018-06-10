@@ -4,49 +4,45 @@
 <?php
 
 //Include functions
-
-//check to see if user if logged in else redirect to index page
+include('includes/functions.php');
 
 ?>
 
 
 
-<?php 
+<?php
 
-/****************Getting  report menu to ajax *******************/
-
-
-//require database class files
+$id = $_GET['cus_id'];
 
 
-//instatiating our database objects
+require('includes/pdocon.php');
 
 
-
-//write a statement to check if the customer id is coming in from the ajax request and write a function to send back the below report menu to ajax, you must bind using the customer id
-
+$db = new Pdocon;
 
 
+$db->query('SELECT * FROM gastos WHERE id=:id');
 
-    
-  
 
-    //Fetch the result and keep in a rows variable
-    
-    
+$db->bindValue(':id', $id, PDO::PARAM_INT);
+
+
+$row = $db->fetchSingle();
+
+
 
     //Looping through our fetched array in row vairable. This can go anywhere in the HTML tags
-    if($rows){
-        
-        $spending_amount = $rows['Spending_Amt'];
-        
+    if($row){
+
+        $spending_amount = $row['spending'];
+
         $total_orders = 100;
-        
+
         $total_amt_spent = $spending_amount * $total_orders;
-        
+
         $average_amt_spent = ($total_amt_spent) / ($total_orders);
-        
-        
+
+
         echo '<div class="col-lg-4 col-md-6">
                         <div class="panel panel-yellow">
                             <div class="panel-heading">
@@ -55,8 +51,8 @@
                                         <i class="fa fa-shopping-cart fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">100</div>
-                                        <div>Total Orders</div>
+                                        <div class="huge"> ' .  count($total_orders) .'</div>
+                                        <div>Lançamentos</div>
                                     </div>
                                 </div>
                             </div>
@@ -79,8 +75,8 @@
                                         <i class="fa fa-support fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">' . $total_amt_spent . '</div>
-                                        <div>Total Amount Spent</div>
+                                        <div class="huge">' . number_format($total_amt_spent, 2) . '</div>
+                                        <div>Total gasto</div>
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +89,7 @@
                             </a>
                         </div>
                     </div>
-          
+
                     <div class="col-lg-4 col-md-6">
                         <div class="panel panel-green">
                             <div class="panel-heading">
@@ -102,8 +98,8 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div id="salary" class="col-xs-9 text-right">
-                                        <div class="huge">' . $average_amt_spent . '</div>
-                                                Average Amount Spent
+                                        <div class="huge">' . number_format($average_amt_spent, 2) . '</div>
+                                                Média de gastos
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,7 @@
 <?php
 //Open ob_start and session_start functions
-
+    ob_start();
+    session_start();
 
 ?>
 
@@ -12,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>CusManager <?php echo "teste"; ?></title>
+        <title>SystemFox - Custos</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -53,7 +54,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand navbar-light" href="admin/customers.php" style="color: #f3f3f3">CUS <strong>MANAGER <?php echo "teste 123"; ?></strong></a>
+                <a class="navbar-brand navbar-light" href="spents.php" style="color: #f3f3f3"> <img src="images/logo_system_fox.jpeg" alt="Logotipo SystemFox" height="80px;"> </a>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -62,31 +63,20 @@
                     <li><a href=""></a></li>
                 </ul>
 
-             <?php //Check to see if user is logged in and collect session info and echo
-                ?>
 
+               <?php if(isset($_SESSION['user_is_logged_in'])){
+
+                        header("Location: admin/my_admin.php");
+
+
+                }else ?>
+
+                <?php { ?>
 
                 <ul class="nav navbar-nav navbar-right">
-                 <li class="navbar-text">Welcome, Fullname Here </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"></b>
-                        <?php echo 'image' ; ?></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href=""><i class="fa fa-cog"></i> Account</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href=""><i class="fa fa-sign-out"></i> Sign-out</a></li>
-                                </ul>
-                </li>
-
+                    <li><a href="#">Olá Visitante!</a></li>
                 </ul>
-
-              <?php // else if the user is not loggin in then show this ?>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="index.php">Welcome Guest!</a></li>
-                    <li><a href="index.php">Login</a></li>
-                    <li><a href="admin/register_admin.php">Register</a></li>
-                </ul>
-
+                <?php } ?>
 
             </div>
 

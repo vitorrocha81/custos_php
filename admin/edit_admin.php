@@ -4,116 +4,151 @@
 <?php
 
 //Include functions
+include('includes/functions.php');
 
-//check to see if user if logged in else redirect to index page
 
 ?>
-   
-   
+
+
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
       </div>
       <div class="col-md-4 col-md-offset-4">
            <form class="form-horizontal" role="form" method="post" action="<?php $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data">
-           
-           <?php 
-               
-               /************** Fetching data from database using id ******************/
 
+           <?php
+
+               /************** Fetching data from database using id ******************/
+                if(isset($_GET['admin_id'])){
+
+                    $admin_id   =   $_GET['admin_id'];
+                 }
 
                 //require database class files
-
+                require('includes/pdocon.php');
 
                 //instatiating our database objects
+                $db = new Pdocon;
 
+                $db->query("SELECT * FROM admin WHERE id =:id");
 
-                //Create a query to display customer inf // You must bind the id coming in from the url
+                $db->bindValue(':id', $admin_id, PDO::PARAM_INT);
 
+                $row = $db->fetchSingle();
+           ?>
 
+            <?php if($row) : ?>
 
-
-                //Get the admin email from the session super global and keep it in a variable.
-
-
-                //Bind your email
-
-
-                //Fetching the data and display it in the form value fields
-               
-          
-             
-               
-    
-            //: ?>
-               
             <div class="form-group">
             <label class="control-label col-sm-2" for="name"></label>
             <div class="col-sm-10">
-              <input type="name" name="name" class="form-control" id="name" value="" required>
+              <input type="name" name="name" class="form-control" id="name" value="<?php echo $row['fullname'] ?>" required>
             </div>
           </div>
-          
+
           <div class="form-group">
             <label class="control-label col-sm-2" for="email"></label>
             <div class="col-sm-10">
-              <input type="email" name="username" class="form-control" id="email" value="" required>
+              <input type="email" name="username" class="form-control" id="email" value="<?php echo $row['email'] ?>" required>
             </div>
           </div>
           <div class="form-group">
             <label class="control-label col-sm-2" for="pwd"></label>
-            <div class="col-sm-10"> 
-              <input type="password" name="password" class="form-control" id="pwd" placeholder="Confirm Password" required>
+            <div class="col-sm-10">
+              <input type="password" name="password" class="form-control" id="pwd" placeholder="Confirm Password" value="" required>
             </div>
           </div>
           <div class="form-group">
             <label class="control-label col-sm-2" for="image"></label>
             <div class="col-sm-10">
-              <input type="file" name="image" id="image" placeholder="Choose Image">
+              <input type="file" name="image" id="image" placeholder="Choose Image" required>
             </div>
           </div>
 
-          <div class="form-group"> 
+          <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10 text-center">
-              <button type="submit" class="btn btn-primary pull-right" name="submit_update">Update</button>
+              <button type="submit" class="btn btn-primary pull-right" name="submit_update">Atualizar</button>
               <a class="pull-left btn btn-danger" href="my_admin.php">Cancel</a>
             </div>
           </div>
-          
-          <?php // end your php ?>
+
+          <?php endif; ?>
 </form>
-          
+
 <?php
-          
-/************** Update data to database using id ******************/  
-          
-      
-//Get field names from from and validate          
-        
-           
-     //Getting image and move images to admin_image folders
-          
-     
-     //Write your query
-     
-     
-     
-     //binding values with your variable
-    
-     
-     //Execute query statement to send it into the database
-     
-     
-     //Confirm execution and set your messages to display as well has redirection and errors
+/************** Atualizando dados do ADMIN  ******************/
+
+
+if(isset($_POST['submit_update'])){
+
+    $raw_name           =   cleandata($_POST['name']);
+
+    $raw_email          =   cleandata($_POST['username']);
+    $raw_password       =   cleandata($_POST['password']);
+
+
+    $c_name             =   sanitazestr($raw_name);
+
+    $c_email            =   validateEmail($raw_email);
+    $c_password         =   sanitazestr($raw_password);
+
+    $hashed_Pass        =   hash_password($c_password);
+
+
+
+    // foto do admin
+    $c_img              =   $_FILES['image']['name'];
+    $c_img_tmp          =   $_FILES['image']['tmp_name'];
+
+    move_uploaded_file($c_img_tmp, "uploaded_image/$c_img");
+
+
+
+        $db->query("UPDATE admin SET fullname=:fullname, email=:email, password=:password, image=:image  WHERE id like $admin_id");
+
+        $db->bindvalue(':fullname', $c_name, PDO::PARAM_STR);
+        $db->bindvalue(':email', $c_email, PDO::PARAM_STR);
+        $db->bindvalue(':password', $hashed_Pass, PDO::PARAM_STR);
+        $db->bindvalue(':image', $c_img, PDO::PARAM_STR);
+
+        $run = $db->execute();
+
+        if($run){
+
+            redirect('my_admin.php');
+
+            keepmsg('<div class="alert alert-success text-center">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>Atualizado com sucesso!</strong>
+                  </div>');
+
+        }else{
+
+            redirect('my_admin.php');
+
+             keepmsg('<div class="alert alert-danger text-center">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Erro, por favor preencha todos os campos!</strong>
+            </div>');
+        }
+
+
+    }
+
+
+
+
+
 
 
 ?>
-          
-          
-          
+
+
+
   </div>
 </div>
-          
+
   </div>
 </div>
-  
-<?php include('includes/footer.php'); ?>  
+
+<?php include('includes/footer.php'); ?>

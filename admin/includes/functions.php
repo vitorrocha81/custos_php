@@ -38,7 +38,7 @@ function redirect($page){
 function keepMsg($message){
 
     if(empty($message)) {
-        $message = "";
+        $message = "Mensagem Padrão de erro.";
     }else {
              $_SESSION['msg']        =      $message;
     }

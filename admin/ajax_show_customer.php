@@ -3,61 +3,53 @@
 
 <?php
 
-//Include functions
 
-//check to see if user if logged in else redirect to index page
+//Include functions
+include('includes/functions.php');
 
 ?>
 
 
 
-<?php 
-
-/****************Get  customer info to ajax *******************/
-
-//require database class files
+<?php
 
 
-//instatiating our database objects
+$id = $_GET['cid'];
+
+require('includes/pdocon.php');
+
+$db = new Pdocon;
 
 
-//Create a query to display customer inf // You must bind the id coming in from the ajax data
+$db->query('SELECT * FROM gastos WHERE id=:id');
 
 
-
-    
-//Get the id and keep it in a variable from the ajax
+$db->bindValue(':id', $id, PDO::PARAM_INT);
 
 
-//Bind your id
-   
-
-//Fetching the data and keep it a row variable
+$row = $db->fetchSingle();
 
 
-
-//Display this result to ajax
     if($row){
-        
+
         echo '  <div  class="table-responsive">
                     <table class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr >
-                                <th class="text-center">Customer Name</th>
-                                <th class="text-center">Amount</th>
-                                <th class="text-center">Email</th>
+                                <th class="text-center">Despesa</th>
+                                <th class="text-center">Valor</th>
                             </tr>
                         </thead>
                         <tbody>
                            <tr class="text-center">
-                            <td>' . $row['full_name'] . '</td>
-                            <td>$ ' . $row['Spending_Amt'] . '</td>
-                            <td>' . $row['email'] . '</td>
+                            <td>' . $row['nome'] . '</td>
+                            <td>' . number_format($row['spending'], 2) . '</td>
                           </tr>
 
                         </tbody>
                     </table>
                 </div>';
+
     }
 
 

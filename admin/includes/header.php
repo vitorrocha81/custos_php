@@ -1,20 +1,33 @@
-<?php 
+<?php
 //Open ob_start and session_start functions
-
+    ob_start();
+    session_start();
 
 ?>
-    
 
-    
+<?php
+
+if(isset($_SESSION['user_is_logged_in'])){
+
+
+}else{
+
+    header("Location: logout.php");
+}
+
+?>
+
+
+
     <html>
 
     <head>
-        
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>CusManager</title>
+        <title>SystemFox</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -31,7 +44,7 @@
         <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
-        
+
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -42,8 +55,8 @@
         url(https://lh3.googleusercontent.com/-7kOBhr3B2dE/AAAAAAAAAAI/AAAAAAAAAAA/AOtt-yHs4g14qqNJaJBXAcpIMv_fV9dDGw/s32-c-mo/photo.jpg)
         -->
     </head>
-    
-    <body style="padding-top: 30px;">            
+
+    <body style="padding-top: 30px;">
     <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
 
         <div class="container-fluid" >
@@ -55,7 +68,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand navbar-light" href="customers.php" style="color: #f3f3f3">CUS <strong>MANAGER</strong></a>
+                <a class="navbar-brand navbar-light" href="spents.php" style="color: #f3f3f3"> <img src="../images/logo_system_fox.jpeg" alt="Logotipo SystemFox" height="80px;"></a>
             </div>
 
             <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -63,38 +76,38 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href=""></a></li>
                 </ul>
-                
-             <?php //Check to see if user is logged in and collect session info and echo
+
+             <?php if(isset($_SESSION['user_is_logged_in'])){
+
+                 $fullname  = $_SESSION['user_data']['fullname'];
+                 $image     = $_SESSION['user_data']['image'];
+
+                }
+
                 ?>
-               
-               
+
                 <ul class="nav navbar-nav navbar-right">
-                 <li class="navbar-text">Welcome, Fullname Here </li>
+               <li class="navbar-text"><a href="spents.php"><i class="fa fa-money"></i> Despesas</a></li>
+                 <li class="navbar-text"><a href="register_spent.php"><i class="fa fa-plus"></i> Cadastrar despesa</a></li>
+                   <li class="navbar-text">Olá, <?php echo $fullname ?> </li>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"></b>
-                        <?php echo 'image' ; ?></a>
+                        <?php echo $image ; ?></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href=""><i class="fa fa-cog"></i> Account</a></li>
+                                    <li><a href="my_admin.php"><i class="fa fa-cog"></i> Minha Conta</a></li>
                                     <li class="divider"></li>
-                                    <li><a href=""><i class="fa fa-sign-out"></i> Sign-out</a></li>
+                                    <li><a href="logout.php"><i class="fa fa-sign-out"></i> Sair</a></li>
                                 </ul>
                 </li>
-                  
+
                 </ul>
 
-              <?php // else if the user is not loggin in then show this ?>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="customers.php">Welcome Guest!</a></li>
-                    <li><a href="customers.php">Login</a></li>
-                    <li><a href="register_admin.php">Register</a></li>
-                </ul>
-     
+
 
             </div>
 
         </div>
 
     </nav>
-        
+
     <div class="container-fluid">
-    
