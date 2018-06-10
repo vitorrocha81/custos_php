@@ -27,7 +27,7 @@ $row = $db->fetchSingle();
 
   <div class="well">
 
-  <small class="pull-right"><a href="customers.php"> Ver usuários</a> </small>
+  <small class="pull-right"><a href="spents.php"> Ver despesas</a> </small>
 
 
   <?php  $fullname = $_SESSION['user_data']['fullname'];
